@@ -1,10 +1,11 @@
 ﻿using Microsoft.Data.SqlClient;
+using Project_Kaveri.Contracts;
 using Project_Kaveri.Models;
 using System.Data;
 
 namespace Project_Kaveri.Repository
 {
-    public class PatientRepository
+    public class PatientRepository:IPatientContract
     {
         private readonly IConfiguration _configuration;
         public PatientRepository(IConfiguration configuration)
@@ -25,46 +26,44 @@ namespace Project_Kaveri.Repository
             command.Parameters.AddWithValue("@Address", patient.Address);
             command.Parameters.AddWithValue("@City", patient.City);
             command.Parameters.AddWithValue("@PhoneNo", patient.PhoneNo);
-            command.Parameters.AddWithValue("@PhoneNo", patient.Photo);
             command.Parameters.AddWithValue("@DataCreatedOn", DateTime.UtcNow);
 
 
             command.ExecuteNonQuery();
         }
-    /*
-        public IEnumerable<User> ReadAllUser()
+    
+        public IEnumerable<Patient> ReadAllPatient()
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
-            using var command = new SqlCommand("ReadAllUser", connection);
+            using var command = new SqlCommand("ReadAllPatient", connection);
             command.CommandType = CommandType.StoredProcedure;
             using var reader = command.ExecuteReader();
-            var users = new List<User>();
+            var patients = new List<Patient>();
             while (reader.Read())
             {
-                users.Add(new User
+                patients.Add(new Patient
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("Id")),
                     Name = reader.IsDBNull(reader.GetOrdinal("Name")) ? null : reader.GetString(reader.GetOrdinal("Name")),
-                    Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : reader.GetString(reader.GetOrdinal("Email")),
+                    Age =  reader.GetInt32(reader.GetOrdinal("Age")),
                     Gender = reader.IsDBNull(reader.GetOrdinal("Gender")) ? null : reader.GetString(reader.GetOrdinal("Gender")),
-                    PhoneNum = reader.IsDBNull(reader.GetOrdinal("PhoneNum")) ? null : reader.GetString(reader.GetOrdinal("PhoneNum")),
-                    DataCreated = reader.IsDBNull(reader.GetOrdinal("DataCreated")) ? null : reader.GetDateTime(reader.GetOrdinal("DataCreated")),
-                    DataUpdated = reader.IsDBNull(reader.GetOrdinal("DataUpdated")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("DataUpdated")),
+                    PhoneNo = reader.GetInt64(reader.GetOrdinal("PhoneNo")),
+                    City = reader.IsDBNull(reader.GetOrdinal("City")) ? null : reader.GetString(reader.GetOrdinal("City")),
 
                 });
             }
-            return users;
+            return patients;
         }
 
-        public User FindUserById(int Id)
+        public Patient FindPatientById(int Id)
         {
-            User user = null;
+            Patient patient = null;
 
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                using (var command = new SqlCommand("FindUserById", connection))
+                using (var command = new SqlCommand("FindPatientById", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@Id", Id);
@@ -73,50 +72,53 @@ namespace Project_Kaveri.Repository
                     {
                         if (reader.Read())
                         {
-                            user = new User
+                            patient = new Patient
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 Name = reader.IsDBNull(reader.GetOrdinal("Name")) ? null : reader.GetString(reader.GetOrdinal("Name")),
-                                Email = reader.GetString(reader.GetOrdinal("Email")),
-                                Password = reader.GetString(reader.GetOrdinal("Password")),
+                                Age = reader.GetInt32(reader.GetOrdinal("Age")),
                                 Gender = reader.IsDBNull(reader.GetOrdinal("Gender")) ? null : reader.GetString(reader.GetOrdinal("Gender")),
+                                PhoneNo = reader.GetInt64(reader.GetOrdinal("PhoneNo")),
                                 Address = reader.IsDBNull(reader.GetOrdinal("Address")) ? null : reader.GetString(reader.GetOrdinal("Address")),
-                                PhoneNum = reader.IsDBNull(reader.GetOrdinal("PhoneNum")) ? null : reader.GetString(reader.GetOrdinal("PhoneNum"))
+                                City = reader.IsDBNull(reader.GetOrdinal("City")) ? null : reader.GetString(reader.GetOrdinal("City")),
+
                             };
                         }
                     }
                 }
             }
 
-            return user;
+            return patient;
         }
-
-        public void UpdateUser(User user)
+        
+        public void UpdatePatient(Patient patient)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             connection.Open();
-            var command = new SqlCommand("UpdateUser", connection);
+            var command = new SqlCommand("UpdatePatient", connection);
             command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@Id", user.Id);
-            command.Parameters.AddWithValue("@Name", user.Name);
-            command.Parameters.AddWithValue("@Email", user.Email);
-            command.Parameters.AddWithValue("@Password", user.Password);
-            command.Parameters.AddWithValue("@Gender", user.Gender);
-            command.Parameters.AddWithValue("@Address", user.Address);
-            command.Parameters.AddWithValue("@PhoneNum", user.PhoneNum);
-            command.Parameters.AddWithValue("@DataUpdated", DateTime.UtcNow);
-            command.ExecuteNonQuery();
-        }
+            command.Parameters.AddWithValue("@Id", patient.Id);
+            command.Parameters.AddWithValue("@Name", patient.Name);
+            command.Parameters.AddWithValue("@Age", patient.Age);
+            command.Parameters.AddWithValue("@Gender", patient.Gender);
+            command.Parameters.AddWithValue("@Address", patient.Address);
+            command.Parameters.AddWithValue("@City", patient.City);
+            command.Parameters.AddWithValue("@PhoneNo", patient.PhoneNo);
+            command.Parameters.AddWithValue("@DataModifiedOn", DateTime.UtcNow);
 
-        public void DeleteUser(int Id)
-        {
-            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            connection.Open();
-            var command = new SqlCommand("DeleteUser", connection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.AddWithValue("@Id", Id);
+
             command.ExecuteNonQuery();
         }
-        */
+        
+        public void DeletePatient(int Id)
+                {
+                    using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                    connection.Open();
+                    var command = new SqlCommand("DeletePatient", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Id", Id);
+                    command.ExecuteNonQuery();
+                }
+                
     }
 }

@@ -1,0 +1,96 @@
+﻿@model Patient
+
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<h3>@ViewData["Title"]</h3>
+<hr />
+<div>
+    <button class="btn btn-primary mb-2" id="addPatient">Add Patient</button>
+</div>
+<div class="container">
+    <table class="table table-dark table-striped table-response table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>City</th>
+                <th>Phone Number</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody id="table">
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal"  id="PatientModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" asp-for="Id" value="0" />
+                
+                <div class="mb-2">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Patient name" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Age"></label>
+                    <input asp-for="Age" type="number" class="form-control" placeholder="Age" />
+                </div>
+                
+                <div class="mb-2">
+                    <label asp-for="Gender"></label>
+                    <br />
+                    <div class="form-check form-check-inline">
+                        <input  class="gender form-check-input" type="radio" name="flexRadio" id="flexRadio1" value="Male">
+                        <label class="form-check-label" for="flexRadio">
+                            Male
+                        </label>
+                    </div>
+                   
+                    <div class="form-check form-check-inline">
+                        <input class="gender form-check-input" type="radio" name="flexRadio" id="flexRadio2" value="Female">
+                        <label class="form-check-label" for="flexRadio">
+                            Female
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="gender form-check-input" type="radio" name="flexRadio" id="flexRadio3" value="Others" checked>
+                        <label class="form-check-label" for="flexRadio">
+                            Others
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Address"></label>
+                    <input asp-for="Address" type="text" class="form-control" placeholder="Address" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="City"></label>
+                    <input asp-for="City" type="text" class="form-control" placeholder="City" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="PhoneNo"></label>
+                    <input asp-for="PhoneNo" type="tel" class="form-control" placeholder="Phone Number" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="submit" type="submit" onclick="Insert();">Submit</button>
+                <button class="btn btn-success" id="Update" type="submit" onclick="Update();" style="display:none">Submit</button>
+                <button class="btn btn-danger" data-bs-dismiss="model" onclick="HideModel();">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/indexjs.js"></script>
